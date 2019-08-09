@@ -21,6 +21,7 @@ services:
       - SECRET_KEY=RandomSecretKeyHere
       - FILE_WATCHER=true
       - NAME=Test Annotator
+      - GOOGLE_APPLICATION_CREDENTIALS=/juroujin-sandbox-f1eeaadf8ed6.json
       - MASK_RCNN_FILE=/models/mask_rcnn_coco.h5
       - |
         MASK_RCNN_CLASSES=
@@ -42,6 +43,7 @@ services:
     volumes:
       - "./datasets:/datasets"
       - "./models:/models"
+      - "./juroujin-sandbox-f1eeaadf8ed6.json:/juroujin-sandbox-f1eeaadf8ed6.json"
     depends_on:
       - database
       - workers
