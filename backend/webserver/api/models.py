@@ -109,10 +109,15 @@ class OpenPose(Resource):
 
         """ COCO keypoints """
         h, w, _ = np.shape(im)
-        s1 = w / 368
-        s2 = h / 656
-        im = im.resize((368, 656))
-        logger.info(np.shape(im))
+
+        if h > w:
+            s1 = w / 368
+            s2 = h / 656
+            im = im.resize((368, 656))
+        else:
+            s1 = w / 656
+            s2 = h / 368
+            im = im.resize((656, 368))
 
         service = googleapiclient.discovery.build('ml', 'v1')
         name = 'projects/{}/models/{}'.format(project, model)
@@ -136,7 +141,7 @@ class OpenPose(Resource):
         heatmaps = response['predictions']
         all_peaks = postprocess(heatmaps[0])
 
-        for i in range(18):
+        for i in range(len(all_peaks)):
             if all_peaks[i]:
                 all_peaks[i][0] *= s1
                 all_peaks[i][1] *= s2
@@ -155,7 +160,9 @@ def postprocess(x):
 
     all_peaks = []
 
-    for part in range(18):
+    keypoints_order = [0, 15, 14, 17, 16, 5, 2, 6, 3, 7, 4, 11, 8, 12, 9, 13, 10]
+
+    for part in keypoints_order:
         map_ori = x[:, :, part]
         map = gaussian_filter(map_ori, sigma=3)
 
