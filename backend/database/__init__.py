@@ -17,7 +17,7 @@ import json
 def connect_mongo(name, host=None):
     if host is None:
         host = Config.MONGODB_HOST
-    connect(name, host=host)
+    connect(name, host=host, port=27020)
 
 
 # https://github.com/MongoEngine/mongoengine/issues/1171
