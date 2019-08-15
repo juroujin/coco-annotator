@@ -2,7 +2,7 @@
 import sys
 
 paths = [
-    '/workspace/'
+    '~/coco-annotator/backend/'
 ]
 
 for path in paths:
