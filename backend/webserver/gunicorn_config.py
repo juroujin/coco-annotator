@@ -2,14 +2,14 @@
 from config import Config
 
 
-bind = '0.0.0.0:5000'
+bind = '0.0.0.0:80'
 backlog = 2048
 
-workers = 1
+workers = 2
 worker_class = 'eventlet'
 worker_connections = 1000
 timeout = 30
-keepalive = 2
+keepalive = 30
 
 reload = Config.DEBUG
 preload = Config.PRELOAD

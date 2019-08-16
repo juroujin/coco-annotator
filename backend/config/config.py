@@ -36,7 +36,7 @@ class Config:
     PRELOAD = False
 
     MAX_CONTENT_LENGTH = os.getenv("MAX_CONTENT_LENGTH", 1 * 1024 * 1024 * 1024)  # 1GB
-    MONGODB_HOST = os.getenv("MONGODB_HOST", "mongodb://database/flask")
+    MONGODB_HOST = os.getenv("MONGODB_HOST", "mongodb://10.140.0.2:27020/flask")
     SECRET_KEY = os.getenv("SECRET_KEY", "<--- CHANGE THIS KEY --->")
     
     LOG_LEVEL = 'debug'
@@ -46,7 +46,7 @@ class Config:
 
     ### Workers
     CELERY_BROKER_URL = "amqp://user:password@messageq:5672//"
-    CELERY_RESULT_BACKEND = "mongodb://database/flask"
+    CELERY_RESULT_BACKEND = "mongodb://10.140.0.2:27020/flask"
 
     ### Dataset Options
     DATASET_DIRECTORY = os.getenv("DATASET_DIRECTORY", "/datasets/")
