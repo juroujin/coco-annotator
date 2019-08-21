@@ -5,6 +5,14 @@ networks:
     external: false
 
 services:
+  buildclient:
+    build:
+      context: .
+      dockerfile: ./Dockerfile.vue
+    container_name: annotator_client_build
+    volumes:
+      - "distshare:/workspace/client/dist"
+
   webserver:
     build:
       context: .
@@ -42,6 +50,7 @@ services:
       - "./models:/models"
       - "./juroujin-sandbox-f1eeaadf8ed6.json:/juroujin-sandbox-f1eeaadf8ed6.json"
     depends_on:
+      - buildclient
       - workers
     networks:
       - cocoannotator
@@ -72,3 +81,7 @@ services:
       - 5672:5672
     networks:
       - cocoannotator
+
+volumes:
+  distshare:
+    driver: local

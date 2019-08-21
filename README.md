@@ -12,11 +12,18 @@ $ docker run -v 567325:/tmp -it google/cloud-sdk:latest gsutil -m cp -r gs://jur
 
 - アノテーションツールにアクセスして準備したdatasetへのpathを指定して作成
 
+- ビルド&実行
+```
+$ dc -f docker-compose.build.yml up -d --build
+```
+
 
 ## オリジナルからの変更項目
 - 「pose estimation」の pre annotation機能
   - cloudml engineのopenposeにリクエスト飛ばしてる
-- GCE上へのデプロイのために改変
+- dockerで立ち上げてるmongodbの分離
+- GCEへのデプロイのために一部改変
+- pre annotationのバックグラウンド化
 
 ## 構成
 - mongodb用のGCEインスタンス2台
@@ -26,24 +33,6 @@ $ docker run -v 567325:/tmp -it google/cloud-sdk:latest gsutil -m cp -r gs://jur
   - webserver, apiserver, rabbitmq, celeryが稼働
   - Container-Optimized OS選んでdocker-composeで起動する
 
-
-## 開発
-- clientの開発をした場合は以下のコマンドでビルドし直す必要がある
-    
-```
-# コンテナ内でビルドして
-$ docker build -t build-client -f Dockerfile.vue .
-# とりあえずコンテナ起動
-$ docker run --name client.temp -it build-client ls
-# 元のビルド済みdirを削除
-$ rm -rf ./client/dist
-# ホスト側にコピー
-$ docker cp client.temp:/workspace/client/dist ./client/
-$ docker rm client.temp
-
-# 全体をビルドし直し，起動
-$ dc -f docker-compose.build.yml up -d --build
-```
 
 ## TODOs
 - body25への対応

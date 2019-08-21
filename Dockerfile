@@ -6,7 +6,7 @@ COPY ./.git /workspace/.git
 RUN python set_path.py
 RUN pip install google-api-python-client
 
-COPY ./client/dist /workspace/dist
+#COPY ./client/dist /workspace/dist
 
 ENV FLASK_ENV=production
 ENV DEBUG=false
