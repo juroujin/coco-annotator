@@ -27,6 +27,24 @@ $ docker run -v 567325:/tmp -it google/cloud-sdk:latest gsutil -m cp -r gs://jur
   - Container-Optimized OS選んでdocker-composeで起動する
 
 
+## 開発
+- clientの開発をした場合は以下のコマンドでビルドし直す必要がある
+    
+```
+# コンテナ内でビルドして
+$ docker build -t build-client -f Dockerfile.vue .
+# とりあえずコンテナ起動
+$ docker run --name client.temp -it build-client ls
+# 元のビルド済みdirを削除
+$ rm -rf ./client/dist
+# ホスト側にコピー
+$ docker cp client.temp:/workspace/client/dist ./client/
+$ docker rm client.temp
+
+# 全体をビルドし直し，起動
+$ dc -f docker-compose.build.yml up -d --build
+```
+
 ## TODOs
 - body25への対応
 - アノテーション済みデータセットのGCSへの出力
