@@ -521,3 +521,16 @@ class DatasetScan(Resource):
         
         return dataset.scan()
 
+
+@api.route('/<int:dataset_id>/annotate')
+class DatasetAnnotate(Resource):
+
+    @login_required
+    def get(self, dataset_id):
+
+        dataset = DatasetModel.objects(id=dataset_id).first()
+
+        if not dataset:
+            return {'message': 'Invalid dataset ID'}, 400
+
+        return dataset.pre_annotate()

@@ -105,6 +105,25 @@ class DatasetModel(DynamicDocument):
             "name": task.name
         }
 
+    def pre_annotate(self):
+
+        from workers.tasks import pre_annotation
+
+        task = TaskModel(
+            name=f"Pre annotation images in {self.name}",
+            dataset_id=self.id,
+            group="Directory Image Annotation"
+        )
+        task.save()
+
+        cel_task = pre_annotation.delay(task.id, self.id)
+
+        return {
+            "celery_id": cel_task.id,
+            "id": task.id,
+            "name": task.name
+        }
+
     def is_owner(self, user):
 
         if user.is_admin:
