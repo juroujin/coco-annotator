@@ -10,8 +10,6 @@ from ..socket import create_socket
 import requests
 from PIL import Image
 
-keypoints_order = [0, 15, 14, 17, 16, 5, 2, 6, 3, 7, 4, 11, 8, 12, 9, 13, 10]
-
 
 @shared_task
 def pre_annotation(task_id, image_id):
