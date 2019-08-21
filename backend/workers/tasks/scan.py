@@ -6,7 +6,6 @@ from database import (
 
 from celery import shared_task
 from ..socket import create_socket
-from . import pre_annotation
 
 import os
 
@@ -50,14 +49,6 @@ def scan_dataset(task_id, dataset_id):
                     ImageModel.create_from_path(path, dataset.id).save()
                     count += 1
                     task.info(f"New file found: {path}")
-
-                    subtask = TaskModel(
-                        name=f"Preannotataion image {db_image['id']}",
-                        group="Directory Image Scan"
-                    )
-                    subtask.save()
-                    pre_annotation.delay(subtask.id, db_image['id'])
-
                 except:
                     task.warning(f"Could not read {path}")
 
