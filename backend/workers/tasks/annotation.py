@@ -56,7 +56,7 @@ def pre_annotation(task_id, dataset_id):
                 categories, annotations = None, None
                 try:
                     response = requests.post(
-                        "http://35.200.126.224/api/model/openpose",
+                        "http://localhost/api/model/openpose",
                         { "image": im })
                     data = response.json()
                     coco = data["coco"]
@@ -66,8 +66,8 @@ def pre_annotation(task_id, dataset_id):
 
                     if len(images) == 0 or len(categories) == 0 or len(annotations) == 0:
                         continue
-                except:
-                    task.error(f"Failed of request for /api/model/openpose")
+                except Exception as e:
+                    task.error(f"message: {0}".format(e.args))
                     continue
 
                 indexedCategories = []
@@ -86,7 +86,7 @@ def pre_annotation(task_id, dataset_id):
 
                     try:
                         requests.post(
-                            "http://35.200.126.224/api/annotation",
+                            "http://localhost/api/annotation",
                             { "image_id": db_image["id"],
                               "category_id": category["id"],
                               "segmentation": segments,
