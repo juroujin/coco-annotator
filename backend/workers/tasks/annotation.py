@@ -10,6 +10,7 @@ from ..socket import create_socket
 import os
 import requests
 from PIL import Image
+from werkzeug.datastructures import FileStorage
 
 
 @shared_task
@@ -54,10 +55,14 @@ def pre_annotation(task_id, dataset_id):
                     task.warning(f"Could not read {path}")
 
                 categories, annotations = None, None
+                task.info(path)
+                fp = open(path, 'rb')
+                fs = FileStorage(fp)
                 try:
                     response = requests.post(
                         "http://webserver/api/model/openpose",
-                        { "image": path })
+                        { "image": fs })
+
                     task.info(response.json())
                     data = response.json()
                     coco = data["coco"]
