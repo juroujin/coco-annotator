@@ -53,22 +53,22 @@ def pre_annotation(task_id, dataset_id):
                 except:
                     task.warning(f"Could not read {path}")
 
-                response = None
+                categories, annotations = None, None
                 try:
                     response = requests.post(
                         "http://35.200.126.224/api/model/openpose",
                         { "image": im })
+                    data = response.json()
+                    coco = data["coco"]
+                    images = coco["images"]
+                    categories = coco["categories"]
+                    annotations = coco["annotations"]
+
+                    if len(images) == 0 or len(categories) == 0 or len(annotations) == 0:
+                        continue
                 except:
                     task.error(f"Failed of request for /api/model/openpose")
-
-                data = response.json()
-                coco = data["coco"]
-                images = coco["images"]
-                categories = coco["categories"]
-                annotations = coco["annotations"]
-
-                if len(images) == 0 or len(categories) == 0 or len(annotations) == 0:
-                    return
+                    continue
 
                 indexedCategories = []
                 for c in categories:
@@ -80,7 +80,7 @@ def pre_annotation(task_id, dataset_id):
                     category = indexedCategories[annotation["category_id"]]
 
                     if len(keypoints) == 0 and len(segments) == 0:
-                        return
+                        continue
 
                     category = category["category"]
 
