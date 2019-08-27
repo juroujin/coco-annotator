@@ -47,47 +47,56 @@ def pre_annotation(task_id, dataset_id):
                 if db_image is None:
                     continue
 
+                im = None
                 try:
                     im = Image.open(path).convert("RGB")
+                except:
+                    task.warning(f"Could not read {path}")
+
+                response = None
+                try:
                     response = requests.post(
-                        "http://localhost:5000/api/model/openpose",
+                        "http://35.200.126.224/api/model/openpose",
                         { "image": im })
+                except:
+                    task.error(f"Failed of request for /api/model/openpose")
 
-                    data = response.json()
-                    coco = data["coco"]
-                    images = coco["images"]
-                    categories = coco["categories"]
-                    annotations = coco["annotations"]
+                data = response.json()
+                coco = data["coco"]
+                images = coco["images"]
+                categories = coco["categories"]
+                annotations = coco["annotations"]
 
-                    if len(images) == 0 or len(categories) == 0 or len(annotations) == 0:
+                if len(images) == 0 or len(categories) == 0 or len(annotations) == 0:
+                    return
+
+                indexedCategories = []
+                for c in categories:
+                    indexedCategories[c.id] = c
+
+                for annotation in annotations:
+                    keypoints = annotation["keyopints"]
+                    segments = annotation["segmentation"]
+                    category = indexedCategories[annotation["category_id"]]
+
+                    if len(keypoints) == 0 and len(segments) == 0:
                         return
 
-                    indexedCategories = []
-                    for c in categories:
-                        indexedCategories[c.id] = c
+                    category = category["category"]
 
-                    for annotation in annotations:
-                        keypoints = annotation["keyopints"]
-                        segments = annotation["segmentation"]
-                        category = indexedCategories[annotation["category_id"]]
-
-                        if len(keypoints) == 0 and len(segments) == 0:
-                            return
-
-                        category = category["category"]
-
+                    try:
                         requests.post(
-                            "http://localhost:5000/api/annotation",
+                            "http://35.200.126.224/api/annotation",
                             { "image_id": db_image["id"],
                               "category_id": category["id"],
                               "segmentation": segments,
                               "keypoints": keypoints
                             })
+                    except:
+                        task.error(f"Failed of request for /api/annotation")
 
-                    count += 1
-                    task.info(f"Pre annotate file: {path}")
-                except:
-                    task.warning(f"Could not read {path}")
+                count += 1
+                task.info(f"Pre annotate file: {path}")
 
     task.info(f"Pre annotated {count} new image(s)")
     task.set_progress(100, socket=socket)
