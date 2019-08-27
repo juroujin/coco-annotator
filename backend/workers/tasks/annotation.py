@@ -3,7 +3,7 @@ from database import (
     TaskModel,
     DatasetModel
 )
-from config import Config
+from webserver.util.mask_rcnn import model as maskrcnn
 
 from celery import shared_task
 from ..socket import create_socket
@@ -11,64 +11,18 @@ from ..socket import create_socket
 import os
 import requests
 from PIL import Image
-import cv2
-import base64
-import io
-import numpy as np
-from scipy.ndimage.filters import gaussian_filter
-import googleapiclient.discovery
-
-
-MASKRCNN_LOADED = os.path.isfile(Config.MASK_RCNN_FILE)
-if MASKRCNN_LOADED:
-    from webserver.util.mask_rcnn import model as maskrcnn
 
 # GCP settings
 project = 'juroujin-sandbox'
 model = 'pose_estimation'
 version = 'v0_1'
 
-def postprocess(x):
-    x = np.squeeze(x)
-    x = cv2.resize(x, (0, 0), fx=8, fy=8, interpolation=cv2.INTER_CUBIC)
-
-    all_peaks = []
-
-    keypoints_order = [0, 15, 14, 17, 16, 5, 2, 6, 3, 7, 4, 11, 8, 12, 9, 13, 10]
-
-    for part in keypoints_order:
-        map_ori = x[:, :, part]
-        map = gaussian_filter(map_ori, sigma=3)
-
-        map_left = np.zeros(map.shape)
-        map_left[1:, :] = map[:-1, :]
-        map_right = np.zeros(map.shape)
-        map_right[:-1, :] = map[1:, :]
-        map_up = np.zeros(map.shape)
-        map_up[:, 1:] = map[:, :-1]
-        map_down = np.zeros(map.shape)
-        map_down[:, :-1] = map[:, 1:]
-
-        peaks_binary = np.logical_and.reduce(
-            (map >= map_left, map >= map_right, map >= map_up, map >= map_down, map > 0.1))
-        peaks = list(zip(np.nonzero(peaks_binary)[1], np.nonzero(peaks_binary)[0]))  # note reverse
-
-        con = 0
-        peak_with_score = []
-        for p in peaks:
-            c = map_ori[p[1], p[0]]
-            if c > con:
-                con = c
-                peak_with_score = [p[0], p[1], con]
-        all_peaks.append(peak_with_score)
-
-    return all_peaks
-
 
 @shared_task
 def pre_annotation(task_id, dataset_id):
 
     task = TaskModel.objects.get(id=task_id)
+    task.info(f"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
     dataset = DatasetModel.objects.get(id=dataset_id)
 
     task.update(status="PROGRESS")
