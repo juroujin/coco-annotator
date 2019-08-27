@@ -22,7 +22,6 @@ version = 'v0_1'
 def pre_annotation(task_id, dataset_id):
 
     task = TaskModel.objects.get(id=task_id)
-    task.info(f"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
     dataset = DatasetModel.objects.get(id=dataset_id)
 
     task.update(status="PROGRESS")
