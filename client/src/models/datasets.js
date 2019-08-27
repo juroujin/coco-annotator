@@ -30,6 +30,9 @@ export default {
   scan(id) {
     return axios.get(`${baseURL}/${id}/scan`);
   },
+  preannot(id) {
+    return axios.get(`${baseURL}/${id}/pre_annotate`);
+  },
   exportingCOCO(id, categories) {
     return axios.get(`${baseURL}/${id}/export?categories=${categories}`);
   },

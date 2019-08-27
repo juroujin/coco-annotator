@@ -522,7 +522,7 @@ class DatasetScan(Resource):
         return dataset.scan()
 
 
-@api.route('/<int:dataset_id>/annotate')
+@api.route('/<int:dataset_id>/pre_annotate')
 class DatasetAnnotate(Resource):
 
     @login_required
