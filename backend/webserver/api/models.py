@@ -79,7 +79,7 @@ class MaskRCNN(Resource):
 @api.route('/maskrcnn')
 class MaskRCNN(Resource):
 
-    @login_required
+    #@login_required
     @api.expect(image_upload)
     def post(self):
         """ COCO data test """
@@ -95,7 +95,7 @@ class MaskRCNN(Resource):
 @api.route('/openpose')
 class OpenPose(Resource):
 
-    @login_required
+    #@login_required
     @api.expect(image_upload)
     def post(self):
 

@@ -29,7 +29,7 @@ class Annotation(Resource):
         return query_util.fix_ids(current_user.annotations.exclude("paper_object").all())
 
     @api.expect(create_annotation)
-    @login_required
+    #@login_required
     def post(self):
         """ Creates an annotation """
         args = create_annotation.parse_args()
