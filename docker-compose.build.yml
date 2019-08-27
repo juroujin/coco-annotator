@@ -49,6 +49,7 @@ services:
       - "./datasets:/datasets"
       - "./models:/models"
       - "./juroujin-sandbox-f1eeaadf8ed6.json:/juroujin-sandbox-f1eeaadf8ed6.json"
+      - "distshare:/workspace/dist"
     depends_on:
       - buildclient
       - workers
