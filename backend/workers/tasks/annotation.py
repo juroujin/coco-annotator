@@ -57,7 +57,7 @@ def pre_annotation(task_id, dataset_id):
                 try:
                     response = requests.post(
                         "http://webserver/api/model/openpose",
-                        { "image": im })
+                        { "image": path })
                     data = response.json()
                     coco = data["coco"]
                     images = coco["images"]
