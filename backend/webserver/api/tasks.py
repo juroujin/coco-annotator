@@ -38,6 +38,20 @@ class TaskId(Resource):
         return {"success": True}
 
 
+@api.route('/<int:task_id>/force')
+class TaskId(Resource):
+    @login_required
+    def delete(self, task_id):
+        """ Deletes task """
+        task = TaskModel.objects(id=task_id).first()
+
+        if task is None:
+            return {"message": "Invalid task id"}, 400
+
+        task.delete()
+        return {"success": True}
+
+
 @api.route('/<int:task_id>/logs')
 class TaskId(Resource):
     @login_required
