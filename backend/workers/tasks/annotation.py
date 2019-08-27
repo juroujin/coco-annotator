@@ -7,6 +7,7 @@ from database import (
 from celery import shared_task
 from ..socket import create_socket
 
+import os
 import requests
 from PIL import Image
 
