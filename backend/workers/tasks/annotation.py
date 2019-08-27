@@ -58,6 +58,7 @@ def pre_annotation(task_id, dataset_id):
                     response = requests.post(
                         "http://webserver/api/model/openpose",
                         { "image": path })
+                    task.info(response.json())
                     data = response.json()
                     coco = data["coco"]
                     images = coco["images"]
@@ -92,7 +93,7 @@ def pre_annotation(task_id, dataset_id):
                               "segmentation": segments,
                               "keypoints": keypoints
                             })
-                    except:
+                    except Exception as e:
                         task.error(e.message)
 
                 count += 1
