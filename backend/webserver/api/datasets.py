@@ -78,7 +78,7 @@ class Dataset(Resource):
         category_ids = CategoryModel.bulk_create(categories)
 
         try:
-            dataset = DatasetModel(name=name, categories=category_ids, annotate_url="http://35.243.97.43/api/model/openpose")
+            dataset = DatasetModel(name=name, categories=category_ids, annotate_url="http://35.200.126.224/api/model/openpose")
             dataset.save()
         except NotUniqueError:
             return {'message': 'Dataset already exists. Check the undo tab to fully delete the dataset.'}, 400
