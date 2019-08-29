@@ -57,11 +57,11 @@ def pre_annotation(task_id, dataset_id):
                 categories, annotations = None, None
                 task.info(path)
                 fp = open(path, 'rb')
-                fs = FileStorage(fp)
                 try:
                     response = requests.post(
                         "http://webserver/api/model/openpose",
-                        { "image": fs })
+                        { "image": fp.read() },
+                        headers={'Content-Type': 'multipart/form-data'})
 
                     task.info(response.json())
                     data = response.json()
