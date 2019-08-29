@@ -53,6 +53,9 @@
       "plugin:prettier/recommended",
       "@vue/prettier"
     ],
+    "rules": {
+      "no-cansole": "off"
+    },
     "parserOptions": {
       "parser": "babel-eslint"
     }
