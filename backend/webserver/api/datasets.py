@@ -552,8 +552,4 @@ class Dataset(Resource):
             in_blob = bucket.get_blob(blob.name)
             in_blob.download_to_filename('/'+blob.name)
 
-        preannot_file = 'datasets/'+dataset_dir+'/pre_coco.json'
-        in_blob = bucket.get_blob(preannot_file)
-        in_blob.download_to_filename('/'+preannot_file)
-
         return 'ok'

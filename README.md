@@ -25,6 +25,7 @@ $ dc down
   - パラメータはjuroujin-sandbox-cocoannotatorバケットのdatasets/直下のフォルダ名を指定
 - アノテーションツールにアクセスして準備したdatasetへのpathを指定して作成
 - pre_annotationファイルをインポートする
+  - gcsからローカルにダウンロードしてそれを指定する
 - 事前にモデルによるアノテーションが施されているため、人手による部分は微修正のみでよい
 
 
