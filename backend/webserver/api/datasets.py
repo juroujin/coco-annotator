@@ -6,6 +6,7 @@ from mongoengine.errors import NotUniqueError
 from threading import Thread
 
 from google_images_download import google_images_download as gid
+from google.cloud import storage
 
 from ..util.pagination_util import Pagination
 from ..util import query_util, coco_util, profile
@@ -534,3 +535,21 @@ class DatasetAnnotate(Resource):
             return {'message': 'Invalid dataset ID'}, 400
 
         return dataset.pre_annotate()
+
+
+@api.route('/pull/<string:dataset_dir>')
+class Dataset(Resource):
+    @login_required
+    def get(self, dataset_dir):
+        """ Pulling retrain-datasets from gcs """
+        client = storage.Client()
+        bucket = client.get_bucket('juroujin-sandbox-cocoannotator')
+        blobs = bucket.list_blobs(prefix='datasets/'+dataset_dir+'/image/', delimiter='/')
+
+        os.mkdir('/datasets/'+dataset_dir+'/image')
+
+        for blob in blobs:
+            in_blob = bucket.get_blob(blob.name)
+            in_blob.download_to_filename('/'+blob.name)
+
+        return
