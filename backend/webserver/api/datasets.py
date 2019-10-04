@@ -546,7 +546,7 @@ class Dataset(Resource):
         bucket = client.get_bucket('juroujin-sandbox-cocoannotator')
         blobs = bucket.list_blobs(prefix='datasets/'+dataset_dir+'/image/', delimiter='/')
 
-        os.mkdir('/datasets/'+dataset_dir+'/image')
+        os.makedirs('/datasets/'+dataset_dir+'/image')
 
         for blob in blobs:
             in_blob = bucket.get_blob(blob.name)
