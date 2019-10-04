@@ -4,7 +4,7 @@ WORKDIR /workspace/
 COPY ./backend/ /workspace/
 COPY ./.git /workspace/.git
 RUN python set_path.py
-RUN pip install google-api-python-client
+RUN pip install google-api-python-client google-cloud-storage
 
 #COPY ./client/dist /workspace/dist
 
